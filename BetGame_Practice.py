@@ -1,34 +1,46 @@
 import random 
 import matplotlib.pyplot as plt
 
-def one_game(balance, bet = 10, win_prob = 0.5):
+starting_balance = 1000
+starting_bet = 10
+def one_game(balance, bet, win_prob = 0.50):
     place = random.random()
     if place < win_prob:
         balance += bet
+        bet = starting_bet
     else:
-        balance -= bet
-    return balance
+        if balance > bet:
+            balance -= bet
+            bet = bet * 2
+        else:
+            balance = 0
+            bet = 0
+    return (balance, bet)
 
 def simulate_run(num_rounds):
-    current_balance = 200
+    current_balance = starting_balance
+    current_bet = starting_bet 
     tracker = []
     while len(tracker) < num_rounds  and current_balance > 0:
-        current_balance = one_game(current_balance)
+        current_balance, current_bet = one_game(current_balance, current_bet)
         tracker.append(current_balance)
     return tracker
 
-results = [simulate_run(100) for i in range(500)]
+results = [simulate_run(1000) for i in range(100)]
 
 final_results = [run[-1] for run in results]
-avarage_profit = sum(final_results) / len(final_results) - 200
+avarage_profit = sum(final_results) / len(final_results) - starting_balance
 
-win_rate = sum([run[-1] > 200 for run in results]) / len(results) * 100
+win_rate = sum([run[-1] > starting_balance for run in results]) / len(final_results) * 100
 
-print( avarage_profit)
-print(win_rate)
+print('your avarage profit is', avarage_profit)
+print('your win rate is', win_rate)
 
 for run in results:
     plt.plot(run)
 
-plt.show
+plt.xlabel('number of flips')
+plt.ylabel('balance')
+plt.title('Maritangle Betting on a Monte Carlo Coin Flip Game')
+plt.show()
 
