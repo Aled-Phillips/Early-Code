@@ -2,8 +2,8 @@ import random
 import matplotlib.pyplot as plt
 
 starting_balance = 1000
-starting_bet = 10
-def one_game(balance, bet, win_prob = 0.50):
+starting_bet = 25
+def one_game(balance, bet, win_prob = 0.5):
     place = random.random()
     if place < win_prob:
         balance += bet
@@ -29,12 +29,12 @@ def simulate_run(num_rounds):
 results = [simulate_run(1000) for i in range(100)]
 
 final_results = [run[-1] for run in results]
-avarage_profit = sum(final_results) / len(final_results) - starting_balance
+avarage_profit = sum([final_result - 1000 for final_result in final_results]) / len(final_results)
 
 win_rate = sum([run[-1] > starting_balance for run in results]) / len(final_results) * 100
-
+print(final_results)
 print('your avarage profit is', avarage_profit)
-print('your win rate is', win_rate)
+print('your win rate is', win_rate, '%')
 
 for run in results:
     plt.plot(run)
