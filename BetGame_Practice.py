@@ -1,4 +1,5 @@
 import random 
+import matplotlib.pyplot as plt
 
 def one_game(balance, bet = 10, win_prob = 0.5):
     place = random.random()
@@ -26,5 +27,8 @@ win_rate = sum([run[-1] > 200 for run in results]) / len(results) * 100
 print( avarage_profit)
 print(win_rate)
 
+for run in results:
+    plt.plot(run)
 
+plt.show
 
